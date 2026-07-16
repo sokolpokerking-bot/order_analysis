@@ -1,0 +1,2 @@
+order_id,person_id,order_date,status,total_amount,currency,payment_method,shipping_method,notes
+1,101,2024-01-10,Delivered,not_a_number,USD,credit_card,standard,Проверка обработки ошибочного файла
