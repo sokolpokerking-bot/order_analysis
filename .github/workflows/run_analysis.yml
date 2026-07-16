@@ -1,0 +1,46 @@
+name: Проверка проекта
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  run-analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Получение файлов проекта
+        uses: actions/checkout@v4
+
+      - name: Установка Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Установка зависимостей
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Запуск анализа
+        run: python run.py
+
+      - name: Вывод результатов
+        run: |
+          echo "=== summary_report.csv ==="
+          cat reports/summary_report.csv
+          echo ""
+          echo "=== errors.log ==="
+          cat logs/errors.log
+
+      - name: Сохранение отчёта и лога
+        uses: actions/upload-artifact@v4
+        with:
+          name: order-analysis-results
+          path: |
+            reports/summary_report.csv
+            logs/errors.log
+          if-no-files-found: error
+          retention-days: 7
